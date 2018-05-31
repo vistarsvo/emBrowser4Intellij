@@ -34,10 +34,8 @@ public class BrowserWindowFactory implements ToolWindowFactory {
 
         final ToolWindowManager manager = ToolWindowManager.getInstance(project);
 
-
-        System.out.println("create");
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(new Browser(new JavaFxBrowserView()),"", false);
+        Content content = contentFactory.createContent(new BrowserPanel(new JavaFxBrowserView()),"", false);
         toolWindow.getContentManager().addContent(content);
         toolWindow.getActivation().doWhenDone(() -> System.out.println("doWhenDone"));
 
@@ -83,7 +81,5 @@ public class BrowserWindowFactory implements ToolWindowFactory {
                 ((ToolWindowManagerEx) manager).addToolWindowManagerListener(listener);
             }
         });
-
-
     }
 }
