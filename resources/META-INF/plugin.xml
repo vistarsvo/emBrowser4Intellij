@@ -1,0 +1,37 @@
+<idea-plugin>
+  <id>space.vistarsvo.embrowser</id>
+  <name>Embedded Web Browser for Intellij Platforms</name>
+  <version>1.0.0</version>
+  <vendor email="vistar.svo@gmail.com" url="https://github.com/vistarsvo/embrowser4intellij">Embedded Browser GitHub Repo</vendor>
+
+  <description><![CDATA[
+      <b>Embedded Web Browser for Intellij Platform</b><br>
+      Forked from <a href="https://github.com/chocotan">chocotan Embedded Web Browser</a>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      1. New Style
+
+    ]]>
+  </change-notes>
+  <idea-version since-build="173.0"/>
+
+  <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <toolWindow id="emBrowser" icon="/icons/browser.png" anchor="right" factoryClass="space.vistar.embrowser.BrowserWindowFactory"/>
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+
+  </application-components>
+
+  <actions>
+    <!-- Add your actions here -->
+
+  </actions>
+
+
+</idea-plugin>
