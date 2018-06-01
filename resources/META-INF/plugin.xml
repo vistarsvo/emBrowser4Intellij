@@ -7,6 +7,14 @@
     <description><![CDATA[
         <b>Embedded Web Browser for Intellij Platform</b><br>
         Forked from <a href="https://github.com/chocotan">chocotan Embedded Web Browser</a>
+        <hr>
+        <br>
+        <p>
+            No need to switch window between browser and IDE if you need to Google something :)<br>
+            <a href="https://raw.githubusercontent.com/vistarsvo/emBrowser4Intellij/master/docs/img/introduce.png">
+                <img width="300" height="163" src="https://raw.githubusercontent.com/vistarsvo/emBrowser4Intellij/master/docs/img/introduce.png" alt="Introduce Image" />
+            </a>
+        </p>
     ]]></description>
 
     <change-notes><![CDATA[
