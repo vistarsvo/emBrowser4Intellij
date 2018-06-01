@@ -29,7 +29,7 @@ public class BrowserPanel extends JPanel {
     /**
      * @return JPanel
      */
-    public JPanel getControllers() {
+    public JPanel getTopControllers() {
         JPanel topControlPanel = new JPanel();
         GridBagLayout topControlPanelLayout = new GridBagLayout();
 
@@ -114,6 +114,48 @@ public class BrowserPanel extends JPanel {
     }
 
     /**
+     * @return JPanel
+     */
+    public JPanel getBottomControllers() {
+        JPanel bottomControlPanel = new JPanel();
+        GridBagLayout topControlPanelLayout = new GridBagLayout();
+
+        bottomControlPanel.setLayout(topControlPanelLayout);
+
+        JButton buttonMinus = new JButton("");
+        buttonMinus.setPreferredSize(new Dimension(30, 30));
+        setButtonIcon(buttonMinus, "minus");
+
+        JButton buttonPlus = new JButton("");
+        buttonPlus.setPreferredSize(new Dimension(30, 30));
+        setButtonIcon(buttonPlus, "plus");
+
+
+        bottomControlPanel.add(buttonMinus);
+        bottomControlPanel.add(buttonPlus);
+
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0;
+        gridBagConstraints.weighty = 0;
+        topControlPanelLayout.setConstraints(buttonMinus, gridBagConstraints);
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 0;
+        gridBagConstraints.weighty = 0;
+
+        buttonMinus.addActionListener(event -> {
+            browserView.setZoom(-0.25);
+        });
+
+        buttonPlus.addActionListener(event -> {
+            browserView.setZoom(0.25);
+        });
+
+        return bottomControlPanel;
+    }
+
+    /**
      *
      */
     private void webBrowserLoad()
@@ -150,11 +192,18 @@ public class BrowserPanel extends JPanel {
             removeAll();
             GridBagLayout layout = new GridBagLayout();
             setLayout(layout);
-            JComponent controllers = getControllers();
-            add(controllers);
+
+            JComponent topControllers = getTopControllers();
+            add(topControllers);
+
             browserView.init();
             JComponent webPanel = browserView.getNode();
             add(webPanel);
+
+            JComponent bottomControllers = getBottomControllers();
+            add(bottomControllers);
+
+
             browserView.urlChangeCallback(s -> {
                 urlField.setText(s);
                 if (!inHistory.get())
@@ -168,16 +217,24 @@ public class BrowserPanel extends JPanel {
                     }
                 inHistory.set(false);
             });
-            GridBagConstraints s = new GridBagConstraints();
-            s.fill = GridBagConstraints.BOTH;
-            s.gridwidth = 0;
-            s.weightx = 1;
-            s.weighty = 0;
-            layout.setConstraints(controllers, s);
-            s.gridwidth = 0;
-            s.weightx = 1;
-            s.weighty = 1;
-            layout.setConstraints(webPanel, s);
+            GridBagConstraints gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.fill = GridBagConstraints.BOTH;
+
+            gridBagConstraints.gridwidth = 0;
+            gridBagConstraints.weightx = 1;
+            gridBagConstraints.weighty = 0;
+            layout.setConstraints(topControllers, gridBagConstraints);
+
+            gridBagConstraints.gridwidth = 0;
+            gridBagConstraints.weightx = 1;
+            gridBagConstraints.weighty = 10;
+            layout.setConstraints(webPanel, gridBagConstraints);
+
+            gridBagConstraints.gridwidth = 0;
+            gridBagConstraints.weightx = 1;
+            gridBagConstraints.weighty = 0;
+            layout.setConstraints(bottomControllers, gridBagConstraints);
+
             validate();
             repaint();
         });

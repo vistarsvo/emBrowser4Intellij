@@ -77,6 +77,7 @@ public class JavaFxBrowserView implements BrowserView {
             browser = new WebView();
             webEngine = browser.getEngine();
             webEngine.setUserAgent(userAgent);
+            webEngine.setUserStyleSheetLocation(getClass().getResource("/default.css").toExternalForm());
         });
     }
 
@@ -99,5 +100,16 @@ public class JavaFxBrowserView implements BrowserView {
         });
 
         return jfxPanel;
+    }
+
+    @Override
+    public void setZoom(double scale)
+    {
+        Platform.runLater(() -> {
+            double currentZoom = browser.getZoom();
+            if (currentZoom >= 0.50 && currentZoom <= 3.75) {
+                browser.setZoom(currentZoom + scale);
+            }
+        });
     }
 }

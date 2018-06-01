@@ -10,4 +10,5 @@ public interface BrowserView {
     public void reload();
     public void urlChangeCallback(Consumer<String> consumer);
     public JComponent getNode();
+    public void setZoom(double scale);
 }
