@@ -7,11 +7,9 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebErrorEvent;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javax.net.ssl.HttpsURLConnection;
@@ -96,26 +94,22 @@ public class JavaFxBrowserView implements BrowserView {
                 if (Worker.State.RUNNING.equals(newValue)) {
                     panel.stateLabel.setText("Loading...");
                 }
-
-                if (Worker.State.SUCCEEDED.equals(newValue)) {
-                    panel.stateLabel.setText("");
-                }
-                if (Worker.State.FAILED.equals(newValue)) {
+                else if (Worker.State.FAILED.equals(newValue)) {
                     panel.stateLabel.setText("Loading error");
-                    String message = "Error load url: " + webEngine.getLocation();
+                    String message = "Error load url: " + panel.urlField.getText();
                     Notifications.Bus.notify(
                             new Notification(
                                     "emBrowser",
                                     "Loading Error",
                                     message,
                                     NotificationType.ERROR));
+                    panel.updateHistoryButtonsState();
+                } else if (Worker.State.SUCCEEDED.equals(newValue)) {
+                    panel.stateLabel.setText(" ");
+                    panel.urlField.setText(webEngine.getLocation());
+                    panel.updateHistoryButtonsState();
                 }
-            });
-            webEngine.setOnError(new EventHandler<WebErrorEvent>() {
-                @Override
-                public void handle(WebErrorEvent event) {
-                    System.out.println(event.getMessage());
-                }
+
             });
         });
     }

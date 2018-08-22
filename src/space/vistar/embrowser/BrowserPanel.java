@@ -74,7 +74,7 @@ public class BrowserPanel extends JPanel {
         gridBagConstraints.weightx = 0;
         gridBagConstraints.weighty = 0;
         topControlPanelLayout.setConstraints(buttonForward, gridBagConstraints);
-        gridBagConstraints.gridwidth = 10;
+        gridBagConstraints.gridwidth = 50;
         gridBagConstraints.weightx = 1;
         gridBagConstraints.weighty = 0;
         topControlPanelLayout.setConstraints(urlField, gridBagConstraints);
@@ -205,7 +205,7 @@ public class BrowserPanel extends JPanel {
     /**
      * Обновляем состояние кнопок истори (туды-сюды)
      */
-    private void updateHistoryButtonsState() {
+    public void updateHistoryButtonsState() {
         buttonBack.setEnabled(browserView.hasHistory(-1));
         buttonForward.setEnabled(browserView.hasHistory(1));
     }
@@ -254,11 +254,6 @@ public class BrowserPanel extends JPanel {
 
             JComponent bottomControllers = getBottomControllers();
             add(bottomControllers);
-
-            browserView.urlChangeCallback(s -> {
-                urlField.setText(s);
-                updateHistoryButtonsState();
-            });
 
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.fill = GridBagConstraints.BOTH;
