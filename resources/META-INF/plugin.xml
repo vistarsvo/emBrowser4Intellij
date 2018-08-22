@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>space.vistarsvo.embrowser</id>
     <name>Embedded Web Browser for Intellij Platforms</name>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <vendor email="vistar.svo@gmail.com" url="https://github.com/vistarsvo/embrowser4intellij">Embedded Browser GitHub Repo</vendor>
 
     <description><![CDATA[
