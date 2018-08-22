@@ -1,22 +1,28 @@
 package space.vistar.embrowser;
 
+
 import javafx.application.Platform;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Main panel component
  */
 public class BrowserPanel extends JPanel {
 
-    private JTextField urlField;
+    public JTextField urlField;
     private BrowserView browserView;
-    private BinaryTreeNode<String> history;
-    private AtomicBoolean inHistory = new AtomicBoolean(false);
+    public JButton buttonBack;
+    public JButton buttonForward;
+    public JButton buttonGo;
+    public JButton buttonRefresh;
+    public JButton buttonMinus;
+    public JButton buttonPlus;
+    public JButton buttonResetZoom;
+    public JLabel zoomLabel;
+    public JLabel stateLabel;
 
     /**
      * @param browserView BrowserView
@@ -36,19 +42,19 @@ public class BrowserPanel extends JPanel {
         topControlPanel.setLayout(topControlPanelLayout);
         this.urlField = new JTextField();
 
-        JButton buttonBack = new JButton("");
+        buttonBack = new JButton("");
         buttonBack.setPreferredSize(new Dimension(30, 30));
         setButtonIcon(buttonBack, "back");
 
-        JButton buttonForward = new JButton("");
+        buttonForward = new JButton("");
         buttonForward.setPreferredSize(new Dimension(30, 30));
         setButtonIcon(buttonForward, "forw");
 
-        JButton buttonGo = new JButton("");
+        buttonGo = new JButton("");
         buttonGo.setPreferredSize(new Dimension(40, 30));
         setButtonIcon(buttonGo, "go");
 
-        JButton buttonRefresh = new JButton("");
+        buttonRefresh = new JButton("");
         buttonRefresh.setPreferredSize(new Dimension(30, 30));
         setButtonIcon(buttonRefresh, "refr");
 
@@ -68,7 +74,7 @@ public class BrowserPanel extends JPanel {
         gridBagConstraints.weightx = 0;
         gridBagConstraints.weighty = 0;
         topControlPanelLayout.setConstraints(buttonForward, gridBagConstraints);
-        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.weightx = 1;
         gridBagConstraints.weighty = 0;
         topControlPanelLayout.setConstraints(urlField, gridBagConstraints);
@@ -83,32 +89,35 @@ public class BrowserPanel extends JPanel {
 
         urlField.addActionListener(event -> this.webBrowserLoad());
 
-        buttonBack.addActionListener(event -> {
-            if (history != null && history.getLeftChild() != null) {
-                history = history.getLeftChild();
-                if (history.getData() != null) {
-                    browserView.load(history.getData().trim());
-                    inHistory.set(true);
-                }
+        urlField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateButtons();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateButtons();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateButtons();
+            }
+
+            void updateButtons() {
+                updateGoState();
+                updateRefreshState();
             }
         });
 
-        buttonForward.addActionListener(event -> {
-            if (history != null && history.getRightChild() != null) {
-                history = history.getRightChild();
-                if (history.getData() != null) {
-                    browserView.load(history.getData().trim());
-                    inHistory.set(true);
-                }
-            }
-        });
+        buttonBack.addActionListener(event -> browserView.goBack());
+
+        buttonForward.addActionListener(event -> browserView.goForward());
 
         buttonGo.addActionListener(event -> this.webBrowserLoad());
 
-        buttonRefresh.addActionListener(event -> {
-            //initWebView();
-            this.webBrowserLoad();
-        });
+        buttonRefresh.addActionListener(event -> this.webBrowserLoad());
 
         return topControlPanel;
     }
@@ -118,28 +127,39 @@ public class BrowserPanel extends JPanel {
      */
     public JPanel getBottomControllers() {
         JPanel bottomControlPanel = new JPanel();
-        GridBagLayout topControlPanelLayout = new GridBagLayout();
+        GridBagLayout bottomControlPanelLayout = new GridBagLayout();
 
-        bottomControlPanel.setLayout(topControlPanelLayout);
+        bottomControlPanel.setLayout(bottomControlPanelLayout);
 
-        JButton buttonMinus = new JButton("");
+        buttonMinus = new JButton("");
         buttonMinus.setPreferredSize(new Dimension(30, 30));
         setButtonIcon(buttonMinus, "minus");
 
-        JButton buttonPlus = new JButton("");
+        buttonPlus = new JButton("");
         buttonPlus.setPreferredSize(new Dimension(30, 30));
         setButtonIcon(buttonPlus, "plus");
 
+        buttonResetZoom = new JButton("");
+        buttonResetZoom.setPreferredSize(new Dimension(30, 30));
+        setButtonIcon(buttonResetZoom, "zoomreset");
 
+        zoomLabel = new JLabel("");
+        stateLabel = new JLabel("");
+        stateLabel.setSize(100, 30);
+
+        bottomControlPanel.add(stateLabel);
         bottomControlPanel.add(buttonMinus);
+        bottomControlPanel.add(buttonResetZoom);
         bottomControlPanel.add(buttonPlus);
+        bottomControlPanel.add(zoomLabel);
+
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.gridwidth = 1;
         gridBagConstraints.weightx = 0;
         gridBagConstraints.weighty = 0;
-        topControlPanelLayout.setConstraints(buttonMinus, gridBagConstraints);
+        bottomControlPanelLayout.setConstraints(buttonMinus, gridBagConstraints);
         gridBagConstraints.gridwidth = 1;
         gridBagConstraints.weightx = 0;
         gridBagConstraints.weighty = 0;
@@ -148,9 +168,14 @@ public class BrowserPanel extends JPanel {
             browserView.setZoom(-0.25);
         });
 
+        buttonResetZoom.addActionListener(event -> {
+            browserView.resetZoom();
+        });
+
         buttonPlus.addActionListener(event -> {
             browserView.setZoom(0.25);
         });
+
 
         return bottomControlPanel;
     }
@@ -172,19 +197,44 @@ public class BrowserPanel extends JPanel {
      * @param iconName icon name
      */
     private void setButtonIcon(JButton button, String iconName) {
-        String path = "/icons/buttons/";
-        try {
-            Image normalIcon = ImageIO.read(getClass().getResource(path + iconName + "_normal.png"));
-            Image pressedIcon = ImageIO.read(getClass().getResource(path + iconName + "_pressed.png"));
-            Image disablesIcon = ImageIO.read(getClass().getResource(path + iconName + "_disabled.png"));
-            button.setIcon(new ImageIcon(normalIcon));
-            button.setPressedIcon(new ImageIcon(pressedIcon));
-            button.setDisabledIcon(new ImageIcon(disablesIcon));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        button.setIcon(Icons.getInstance().getButtonIcon(iconName, Icons.STATE_NORMAL));
+        button.setPressedIcon(Icons.getInstance().getButtonIcon(iconName, Icons.STATE_PRESSED));
+        button.setDisabledIcon(Icons.getInstance().getButtonIcon(iconName, Icons.STATE_DISABLE));
     }
 
+    /**
+     * Обновляем состояние кнопок истори (туды-сюды)
+     */
+    private void updateHistoryButtonsState() {
+        buttonBack.setEnabled(browserView.hasHistory(-1));
+        buttonForward.setEnabled(browserView.hasHistory(1));
+    }
+
+    /**
+     * Состояние кнопки GO
+     */
+    private void updateGoState()
+    {
+        buttonGo.setEnabled(!this.urlField.getText().isEmpty());
+    }
+
+    /**
+     * Состояние кнопки Refresh
+     */
+    private void updateRefreshState()
+    {
+        buttonRefresh.setEnabled(!this.urlField.getText().isEmpty());
+    }
+
+    /**
+     * Обновление кнопок масштабирования
+     */
+    public void updateZoomButtons()
+    {
+        buttonResetZoom.setEnabled(browserView.isScaled());
+        buttonPlus.setEnabled(browserView.canZoomIn());
+        buttonMinus.setEnabled(browserView.canZoomOut());
+    }
 
     private void initWebView() {
         Platform.setImplicitExit(false);
@@ -197,26 +247,19 @@ public class BrowserPanel extends JPanel {
             add(topControllers);
 
             browserView.init();
+            browserView.setPanel(this);
+
             JComponent webPanel = browserView.getNode();
             add(webPanel);
 
             JComponent bottomControllers = getBottomControllers();
             add(bottomControllers);
 
-
             browserView.urlChangeCallback(s -> {
                 urlField.setText(s);
-                if (!inHistory.get())
-                    if (history == null) {
-                        history = new BinaryTreeNode<>(s);
-                    } else {
-                        BinaryTreeNode<String> current = new BinaryTreeNode<>(s);
-                        history.setRightChild(current);
-                        current.setLeftChild(history);
-                        history = history.getRightChild();
-                    }
-                inHistory.set(false);
+                updateHistoryButtonsState();
             });
+
             GridBagConstraints gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.fill = GridBagConstraints.BOTH;
 
@@ -237,6 +280,11 @@ public class BrowserPanel extends JPanel {
 
             validate();
             repaint();
+
+            buttonResetZoom.setEnabled(false);
+            updateHistoryButtonsState();
+            updateGoState();
+            updateRefreshState();
         });
     }
 }
