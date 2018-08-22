@@ -1,12 +1,19 @@
 package space.vistar.embrowser;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebErrorEvent;
+import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
-
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -15,15 +22,19 @@ import javax.swing.JComponent;
 import java.security.GeneralSecurityException;
 import java.util.function.Consumer;
 
+/**
+ * Браузер
+ */
 public class JavaFxBrowserView implements BrowserView {
 
-    private static final String userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0";
+    private static final String userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/61.0";
 
     private WebView browser;
     private WebEngine webEngine;
-    private String url;
 
     private JFXPanel jfxPanel;
+
+    private BrowserPanel panel;
 
     static {
         // https://stackoverflow.com/questions/22605701/javafx-webview-not-working-using-a-untrusted-ssl-certificate
@@ -57,6 +68,9 @@ public class JavaFxBrowserView implements BrowserView {
     public JavaFxBrowserView() {
     }
 
+    public void setPanel(BrowserPanel panel) {
+        this.panel = panel;
+    }
 
     @Override
     public void init() {
@@ -78,6 +92,31 @@ public class JavaFxBrowserView implements BrowserView {
             webEngine = browser.getEngine();
             webEngine.setUserAgent(userAgent);
             webEngine.setUserStyleSheetLocation(getClass().getResource("/default.css").toExternalForm());
+            webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+                if (Worker.State.RUNNING.equals(newValue)) {
+                    panel.stateLabel.setText("Loading...");
+                }
+
+                if (Worker.State.SUCCEEDED.equals(newValue)) {
+                    panel.stateLabel.setText("");
+                }
+                if (Worker.State.FAILED.equals(newValue)) {
+                    panel.stateLabel.setText("Loading error");
+                    String message = "Error load url: " + webEngine.getLocation();
+                    Notifications.Bus.notify(
+                            new Notification(
+                                    "emBrowser",
+                                    "Loading Error",
+                                    message,
+                                    NotificationType.ERROR));
+                }
+            });
+            webEngine.setOnError(new EventHandler<WebErrorEvent>() {
+                @Override
+                public void handle(WebErrorEvent event) {
+                    System.out.println(event.getMessage());
+                }
+            });
         });
     }
 
@@ -102,14 +141,82 @@ public class JavaFxBrowserView implements BrowserView {
         return jfxPanel;
     }
 
+    private double currentScale = 1;
     @Override
     public void setZoom(double scale)
     {
         Platform.runLater(() -> {
             double currentZoom = browser.getZoom();
-            if (currentZoom >= 0.50 && currentZoom <= 3.75) {
+            if ((scale < 0 && currentZoom >= 0.50)
+                || (scale > 0 && currentZoom <= 3.75)) {
                 browser.setZoom(currentZoom + scale);
+                currentScale = currentZoom + scale;
+                panel.updateZoomButtons();
+                if (currentScale == 1d) {
+                    panel.zoomLabel.setText("");
+                } else {
+                    panel.zoomLabel.setText(String.valueOf(Math.round(currentScale * 100)) + '%');
+                }
             }
         });
+    }
+    @Override
+    public void resetZoom()
+    {
+        Platform.runLater(() -> {
+            browser.setZoom(1);
+            currentScale = 1;
+            panel.zoomLabel.setText("");
+        });
+    }
+
+    @Override
+    public boolean canZoomIn()
+    {
+        return currentScale <= 3.75;
+    }
+
+    @Override
+    public boolean canZoomOut()
+    {
+        return currentScale >= 0.5;
+    }
+
+    @Override
+    public boolean isScaled()
+    {
+        return currentScale != 1d;
+    }
+
+    @Override
+    public void goBack()
+    {
+        Platform.runLater(() -> webEngine.getHistory().go(this.hasHistory(-1) ? -1 : 0));
+    }
+
+    @Override
+    public void goForward()
+    {
+        Platform.runLater(() -> webEngine.getHistory().go(this.hasHistory(1) ? 1 : 0));
+    }
+
+    @Override
+    public boolean hasHistory(int way)
+    {
+        if (webEngine == null) {
+            return false;
+        }
+
+        final WebHistory history = webEngine.getHistory();
+        ObservableList<WebHistory.Entry> entryList = history.getEntries();
+        int currentIndex = history.getCurrentIndex();
+
+        if (way == -1 ) {
+            return entryList.size() > 1 && currentIndex > 0;
+        } else if (way == 1) {
+            return entryList.size() > 1 && currentIndex < entryList.size() - 1;
+        } else {
+            return false;
+        }
     }
 }
