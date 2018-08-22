@@ -37,10 +37,9 @@ public class BrowserWindowFactory implements ToolWindowFactory {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(new BrowserPanel(new JavaFxBrowserView()),"", false);
         toolWindow.getContentManager().addContent(content);
-        toolWindow.getActivation().doWhenDone(() -> System.out.println("doWhenDone"));
-
-        toolWindow.activate(() -> System.out.println("activate"));
-        toolWindow.hide(() -> System.out.println("hide"));
+        //toolWindow.getActivation().doWhenDone(() -> System.out.println("doWhenDone"));
+        //toolWindow.activate(() -> System.out.println("activate"));
+        //toolWindow.hide(() -> System.out.println("hide"));
         toolWindow.getContentManager().getComponent().addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -55,12 +54,12 @@ public class BrowserWindowFactory implements ToolWindowFactory {
 
             @Override
             public void componentShown(ComponentEvent e) {
-                System.out.println("Shown");
+
             }
 
             @Override
             public void componentHidden(ComponentEvent e) {
-                System.out.println("Hidden");
+
             }
         });
 
@@ -71,7 +70,8 @@ public class BrowserWindowFactory implements ToolWindowFactory {
 
             @Override
             public void stateChanged() {
-               System.out.println("Toggle");
+
+
             }
         };
 
