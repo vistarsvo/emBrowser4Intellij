@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>space.vistarsvo.embrowser</id>
     <name>Embedded Web Browser for Intellij Platforms</name>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <vendor email="vistar.svo@gmail.com" url="https://github.com/vistarsvo/embrowser4intellij">Embedded Browser GitHub Repo</vendor>
 
     <description><![CDATA[
@@ -19,8 +19,14 @@
 
     <change-notes><![CDATA[
         <ul>
-            <li>set default browser css styles</li>
-            <li>add zoom controls</li>
+            <li>Add Reset Zoom control</li>
+            <li>Add new icons for Darcula theme</li>
+            <li>Add error loading notification</li>
+            <li>Add button disable states</li>
+            <li>Add zoom value label</li>
+            <li>Add loading and fail states label</li>
+            <li>Fix zooming</li>
+            <li>Fix history</li>
         </ul>
     ]]>
     </change-notes>

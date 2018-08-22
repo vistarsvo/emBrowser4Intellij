@@ -1,6 +1,17 @@
 Embedded Web Browser for Intellij Platforms Change Log
 ======================================================
 
+1.1.0 August 22, 2018
+--------------------------
+- Add Reset Zoom control
+- Add new icons for Darcula theme
+- Add error loading notification
+- Add button disable states
+- Add zoom value label
+- Add loading and fail states label
+- Fix zooming
+- Fix history 
+
 1.0.1 June 01, 2018
 --------------------------
 - Add Zoom controls
