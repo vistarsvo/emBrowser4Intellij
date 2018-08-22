@@ -92,7 +92,7 @@ public class JavaFxBrowserView implements BrowserView {
             webEngine.setUserStyleSheetLocation(getClass().getResource("/default.css").toExternalForm());
             webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
                 if (Worker.State.RUNNING.equals(newValue)) {
-                    panel.stateLabel.setText("Loading...");
+                     panel.stateLabel.setText("Loading...");
                 }
                 else if (Worker.State.FAILED.equals(newValue)) {
                     panel.stateLabel.setText("Loading error");
@@ -105,11 +105,21 @@ public class JavaFxBrowserView implements BrowserView {
                                     NotificationType.ERROR));
                     panel.updateHistoryButtonsState();
                 } else if (Worker.State.SUCCEEDED.equals(newValue)) {
-                    panel.stateLabel.setText(" ");
-                    panel.urlField.setText(webEngine.getLocation());
+                    panel.stateLabel.setText("OK");
+                    String location = webEngine.getLocation();
+                    new java.util.Timer().schedule(
+                            new java.util.TimerTask() {
+                                @Override
+                                public void run() {
+                                    Platform.runLater(() -> {
+                                        panel.urlField.setText(location);
+                                    });
+                                }
+                            },
+                            500
+                    );
                     panel.updateHistoryButtonsState();
                 }
-
             });
         });
     }
@@ -119,6 +129,7 @@ public class JavaFxBrowserView implements BrowserView {
         Platform.runLater(() -> {
             webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
                 consumer.accept(webEngine.getLocation());
+               // panel.urlField.setText(webEngine.getLocation());
             });
         });
     }
