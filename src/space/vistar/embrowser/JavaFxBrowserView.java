@@ -35,22 +35,20 @@ public class JavaFxBrowserView implements BrowserView {
     private BrowserPanel panel;
 
     static {
-        // https://stackoverflow.com/questions/22605701/javafx-webview-not-working-using-a-untrusted-ssl-certificate
-        // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts = new TrustManager[]{
-                new X509TrustManager() {
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
-
-                    public void checkClientTrusted(
-                            java.security.cert.X509Certificate[] certs, String authType) {
-                    }
-
-                    public void checkServerTrusted(
-                            java.security.cert.X509Certificate[] certs, String authType) {
-                    }
+            new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
                 }
+
+                public void checkClientTrusted(
+                        java.security.cert.X509Certificate[] certs, String authType) {
+                }
+
+                public void checkServerTrusted(
+                        java.security.cert.X509Certificate[] certs, String authType) {
+                }
+            }
         };
 
         // Install the all-trusting trust manager
@@ -61,7 +59,6 @@ public class JavaFxBrowserView implements BrowserView {
         } catch (GeneralSecurityException e) {
         }
     }
-
 
     public JavaFxBrowserView() {
     }
@@ -129,7 +126,6 @@ public class JavaFxBrowserView implements BrowserView {
         Platform.runLater(() -> {
             webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
                 consumer.accept(webEngine.getLocation());
-               // panel.urlField.setText(webEngine.getLocation());
             });
         });
     }
@@ -172,6 +168,7 @@ public class JavaFxBrowserView implements BrowserView {
             browser.setZoom(1);
             currentScale = 1;
             panel.zoomLabel.setText("");
+            panel.updateZoomButtons();
         });
     }
 

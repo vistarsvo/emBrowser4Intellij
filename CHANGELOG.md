@@ -1,6 +1,10 @@
 Embedded Web Browser for Intellij Platforms Change Log
 ======================================================
 
+1.1.3 August 23, 2018
+--------------------------
+- Fix zooming out button state
+
 1.1.2 August 22, 2018
 --------------------------
 - Add Reset Zoom control

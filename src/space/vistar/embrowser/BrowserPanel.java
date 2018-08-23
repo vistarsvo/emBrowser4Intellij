@@ -132,50 +132,55 @@ public class BrowserPanel extends JPanel {
         bottomControlPanel.setLayout(bottomControlPanelLayout);
 
         buttonMinus = new JButton("");
-        buttonMinus.setPreferredSize(new Dimension(30, 30));
+        buttonMinus.setPreferredSize(new Dimension(26, 26));
         setButtonIcon(buttonMinus, "minus");
 
         buttonPlus = new JButton("");
-        buttonPlus.setPreferredSize(new Dimension(30, 30));
+        buttonPlus.setPreferredSize(new Dimension(26, 26));
         setButtonIcon(buttonPlus, "plus");
 
         buttonResetZoom = new JButton("");
-        buttonResetZoom.setPreferredSize(new Dimension(30, 30));
+        buttonResetZoom.setPreferredSize(new Dimension(26, 26));
         setButtonIcon(buttonResetZoom, "zoomreset");
 
         zoomLabel = new JLabel("");
+        zoomLabel.setSize(40, 26);
         stateLabel = new JLabel("");
-        stateLabel.setSize(100, 30);
+        stateLabel.setSize(100, 26);
 
-        bottomControlPanel.add(stateLabel);
+        JPanel zoomPanel = new JPanel();
+        zoomPanel.setSize(100, 30);
+        zoomPanel.add(zoomLabel);
+        zoomPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JPanel statePanel = new JPanel();
+        statePanel.setSize(100, 30);
+        statePanel.add(stateLabel);
+
+        bottomControlPanel.add(statePanel);
         bottomControlPanel.add(buttonMinus);
         bottomControlPanel.add(buttonResetZoom);
         bottomControlPanel.add(buttonPlus);
-        bottomControlPanel.add(zoomLabel);
-
+        bottomControlPanel.add(zoomPanel);
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.weightx = 1;
+        bottomControlPanelLayout.setConstraints(stateLabel, gridBagConstraints);
         gridBagConstraints.weightx = 0;
-        gridBagConstraints.weighty = 0;
         bottomControlPanelLayout.setConstraints(buttonMinus, gridBagConstraints);
-        gridBagConstraints.gridwidth = 1;
         gridBagConstraints.weightx = 0;
-        gridBagConstraints.weighty = 0;
+        bottomControlPanelLayout.setConstraints(buttonResetZoom, gridBagConstraints);
+        gridBagConstraints.weightx = 0;
+        bottomControlPanelLayout.setConstraints(buttonPlus, gridBagConstraints);
+        gridBagConstraints.weightx = 1;
+        bottomControlPanelLayout.setConstraints(zoomLabel, gridBagConstraints);
 
-        buttonMinus.addActionListener(event -> {
-            browserView.setZoom(-0.25);
-        });
+        buttonMinus.addActionListener(event -> browserView.setZoom(-0.25));
 
-        buttonResetZoom.addActionListener(event -> {
-            browserView.resetZoom();
-        });
+        buttonResetZoom.addActionListener(event -> browserView.resetZoom());
 
-        buttonPlus.addActionListener(event -> {
-            browserView.setZoom(0.25);
-        });
-
+        buttonPlus.addActionListener(event -> browserView.setZoom(0.25));
 
         return bottomControlPanel;
     }
