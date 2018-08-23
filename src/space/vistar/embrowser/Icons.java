@@ -40,8 +40,7 @@ public class Icons {
         return instance;
     }
 
-    public Icons()
-    {
+    public Icons() {
         for (String button : buttonsPreload) {
             HashMap<String, Icon> buttonIcons = new HashMap<>();
             for (String state : buttonState) {
@@ -51,8 +50,7 @@ public class Icons {
         }
     }
 
-    public Icon getButtonIcon(String button, String state)
-    {
+    public Icon getButtonIcon(String button, String state) {
         if (!buttonsIcons.containsKey(button)) {
             return null;
         }

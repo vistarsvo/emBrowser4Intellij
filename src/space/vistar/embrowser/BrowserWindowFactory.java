@@ -42,44 +42,26 @@ public class BrowserWindowFactory implements ToolWindowFactory {
         //toolWindow.hide(() -> System.out.println("hide"));
         toolWindow.getContentManager().getComponent().addComponentListener(new ComponentListener() {
             @Override
-            public void componentResized(ComponentEvent e) {
-
-            }
+            public void componentResized(ComponentEvent e) {}
 
             @Override
-            public void componentMoved(ComponentEvent e) {
-
-                System.out.println("Moved");
-            }
+            public void componentMoved(ComponentEvent e) { }
 
             @Override
-            public void componentShown(ComponentEvent e) {
-
-            }
+            public void componentShown(ComponentEvent e) {}
 
             @Override
-            public void componentHidden(ComponentEvent e) {
-
-            }
+            public void componentHidden(ComponentEvent e) {}
         });
 
         final ToolWindowManagerListener listener = new ToolWindowManagerListener() {
             @Override
-            public void toolWindowRegistered(@NotNull String id) {
-            }
+            public void toolWindowRegistered(@NotNull String id) {}
 
             @Override
-            public void stateChanged() {
-
-
-            }
+            public void stateChanged() {}
         };
 
-        toolWindow.show(new Runnable() {
-            @Override
-            public void run() {
-                ((ToolWindowManagerEx) manager).addToolWindowManagerListener(listener);
-            }
-        });
+        toolWindow.show(() -> ((ToolWindowManagerEx) manager).addToolWindowManagerListener(listener));
     }
 }
