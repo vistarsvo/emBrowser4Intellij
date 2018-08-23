@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="space.vistar.embrowser.Browser.BrowserMainPanel">
+  <grid id="27dc6" binding="BrowserPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="703" height="400"/>
+    </constraints>
+    <properties/>
+    <clientProperties>
+      <html.disable class="java.lang.Boolean" value="false"/>
+    </clientProperties>
+    <border type="none"/>
+    <children>
+      <grid id="4d988" binding="NavigateControlPanel" layout-manager="GridBagLayout">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="b3531" binding="navigatePanel" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="3c295" class="javax.swing.JButton" binding="backButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="30" height="30"/>
+                    <preferred-size width="30" height="30"/>
+                    <maximum-size width="30" height="30"/>
+                  </grid>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <margin top="2" left="2" bottom="2" right="2"/>
+                  <maximumSize width="30" height="30"/>
+                  <minimumSize width="30" height="30"/>
+                  <preferredSize width="30" height="30"/>
+                  <text value=""/>
+                  <toolTipText value="History Back"/>
+                </properties>
+              </component>
+              <component id="5a53c" class="javax.swing.JButton" binding="forwardButton">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="30" height="30"/>
+                    <preferred-size width="30" height="30"/>
+                    <maximum-size width="30" height="30"/>
+                  </grid>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <margin top="2" left="2" bottom="2" right="2"/>
+                  <maximumSize width="30" height="30"/>
+                  <minimumSize width="30" height="30"/>
+                  <preferredSize width="30" height="30"/>
+                  <selected value="false"/>
+                  <text value=""/>
+                  <toolTipText value="History forward"/>
+                </properties>
+              </component>
+              <component id="76976" class="javax.swing.JButton" binding="reloadButton">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="30" height="30"/>
+                    <preferred-size width="30" height="30"/>
+                    <maximum-size width="30" height="30"/>
+                  </grid>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <label value=""/>
+                  <margin top="2" left="2" bottom="2" right="2"/>
+                  <maximumSize width="30" height="30"/>
+                  <minimumSize width="30" height="30"/>
+                  <preferredSize width="30" height="30"/>
+                  <text value=""/>
+                  <toolTipText value="Reload page"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="e3d91" binding="optionsPanel" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <alignmentX value="0.0"/>
+              <alignmentY value="0.0"/>
+              <minimumSize width="30" height="30"/>
+              <preferredSize width="30" height="30"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="dfd12" class="javax.swing.JButton" binding="optionsButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="30" height="30"/>
+                    <preferred-size width="30" height="30"/>
+                    <maximum-size width="30" height="30"/>
+                  </grid>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <alignmentX value="0.0"/>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <label value=""/>
+                  <margin top="2" left="2" bottom="2" right="2"/>
+                  <maximumSize width="30" height="30"/>
+                  <minimumSize width="30" height="30"/>
+                  <preferredSize width="30" height="30"/>
+                  <text value=""/>
+                  <toolTipText value="Options"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="539fb" binding="urlNavigatePanel" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="1.0" weighty="1.0"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="9359c" class="javax.swing.JButton" binding="navigateButton">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="30" height="30"/>
+                    <preferred-size width="30" height="30"/>
+                    <maximum-size width="30" height="30"/>
+                  </grid>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <label value=""/>
+                  <margin top="2" left="2" bottom="2" right="2"/>
+                  <maximumSize width="40" height="30"/>
+                  <minimumSize width="40" height="30"/>
+                  <preferredSize width="40" height="30"/>
+                  <text value=""/>
+                  <toolTipText value="Navigate to url"/>
+                </properties>
+              </component>
+              <component id="2363e" class="javax.swing.JLabel" binding="titleLable">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <focusTraversalPolicyProvider value="true"/>
+                  <font size="9"/>
+                  <horizontalTextPosition value="11"/>
+                  <requestFocusEnabled value="false"/>
+                  <text value="..."/>
+                  <verticalAlignment value="0"/>
+                </properties>
+              </component>
+              <component id="aa60d" class="javax.swing.JComboBox" binding="urlComboBox">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <alignmentX value="1.0"/>
+                  <alignmentY value="1.0"/>
+                  <autoscrolls value="true"/>
+                  <editable value="true"/>
+                  <focusCycleRoot value="false"/>
+                  <focusTraversalPolicyProvider value="false"/>
+                  <inheritsPopupMenu value="false"/>
+                  <maximumSize width="-1" height="-1"/>
+                  <minimumSize width="-1" height="24"/>
+                  <model>
+                    <item value="https://"/>
+                  </model>
+                  <popupVisible value="false"/>
+                  <preferredSize width="-1" height="-1"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="e75e0" binding="webBrowserViewPanel" layout-manager="GridBagLayout">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <alignmentX value="0.0"/>
+          <alignmentY value="0.0"/>
+          <autoscrolls value="false"/>
+          <maximumSize width="0" height="0"/>
+          <minimumSize width="0" height="0"/>
+          <opaque value="false"/>
+          <preferredSize width="0" height="0"/>
+          <requestFocusEnabled value="false"/>
+        </properties>
+        <border type="none">
+          <font/>
+          <title-color color="-4473925"/>
+        </border>
+        <children/>
+      </grid>
+      <grid id="f4f92" binding="bottomPanel" layout-manager="GridBagLayout">
+        <constraints border-constraint="South"/>
+        <properties>
+          <minimumSize width="300" height="30"/>
+          <preferredSize width="300" height="30"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="af660" binding="statePanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="5" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="1.0" weighty="1.0"/>
+            </constraints>
+            <properties>
+              <alignmentX value="0.0"/>
+              <alignmentY value="0.0"/>
+              <enabled value="true"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="45c49" class="javax.swing.JLabel" binding="stateLabel">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <alignmentX value="0.0"/>
+                  <autoscrolls value="false"/>
+                  <inheritsPopupMenu value="true"/>
+                  <text value="Blank document..."/>
+                  <toolTipText value="State bar"/>
+                </properties>
+                <clientProperties>
+                  <html.disable class="java.lang.Boolean" value="false"/>
+                </clientProperties>
+              </component>
+              <component id="1d837" class="javax.swing.JButton" binding="htmlSourceButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="26" height="24"/>
+                    <preferred-size width="26" height="24"/>
+                    <maximum-size width="26" height="24"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <contentAreaFilled value="true"/>
+                  <defaultCapable value="true"/>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="0"/>
+                  <text value=""/>
+                  <toolTipText value="View HTML source"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="9343f" binding="zoomPanel" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="2" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="1.0" weighty="1.0"/>
+            </constraints>
+            <properties>
+              <alignmentX value="0.0"/>
+              <alignmentY value="0.0"/>
+            </properties>
+            <border type="etched"/>
+            <children>
+              <component id="54ed0" class="javax.swing.JLabel" binding="zoomState">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <focusCycleRoot value="false"/>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="11"/>
+                  <minimumSize width="80" height="14"/>
+                  <preferredSize width="80" height="14"/>
+                  <text value="zoom 100%"/>
+                  <toolTipText value="Zoom state"/>
+                </properties>
+              </component>
+              <component id="9edab" class="javax.swing.JButton" binding="zoomOutButton">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="24" height="24"/>
+                    <preferred-size width="24" height="24"/>
+                    <maximum-size width="24" height="24"/>
+                  </grid>
+                  <gridbag weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <label value=""/>
+                  <margin top="2" left="5" bottom="2" right="5"/>
+                  <maximumSize width="24" height="24"/>
+                  <minimumSize width="24" height="24"/>
+                  <preferredSize width="24" height="24"/>
+                  <text value=""/>
+                  <toolTipText value="Zoom Out"/>
+                </properties>
+              </component>
+              <component id="12712" class="javax.swing.JButton" binding="resetZoomButton">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="24" height="24"/>
+                    <preferred-size width="24" height="24"/>
+                    <maximum-size width="24" height="24"/>
+                  </grid>
+                  <gridbag weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <label value=""/>
+                  <margin top="2" left="5" bottom="2" right="5"/>
+                  <maximumSize width="24" height="24"/>
+                  <minimumSize width="24" height="24"/>
+                  <preferredSize width="24" height="24"/>
+                  <text value=""/>
+                  <toolTipText value="Reset zoom to 100%"/>
+                </properties>
+              </component>
+              <component id="fd142" class="javax.swing.JButton" binding="zoomInButton">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="24" height="24"/>
+                    <preferred-size width="24" height="24"/>
+                  </grid>
+                  <gridbag weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <alignmentY value="0.0"/>
+                  <borderPainted value="false"/>
+                  <label value=""/>
+                  <margin top="2" left="5" bottom="2" right="5"/>
+                  <maximumSize width="24" height="24"/>
+                  <minimumSize width="24" height="24"/>
+                  <preferredSize width="24" height="24"/>
+                  <selected value="true"/>
+                  <text value=""/>
+                  <toolTipText value="Zoom In"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

@@ -1,5 +1,7 @@
 package space.vistar.embrowser;
 
+import space.vistar.embrowser.Browser.BrowserMainPanel;
+
 import javax.swing.*;
 import java.util.function.Consumer;
 
@@ -20,5 +22,7 @@ public interface BrowserView {
     public boolean isScaled();
     public boolean canZoomIn();
     public boolean canZoomOut();
-    public void setPanel(BrowserPanel panel);
+    public void setBrowserPanel(BrowserMainPanel browserPanel);
+    public String getHtmlSource();
+    public boolean hasHtmlSource();
 }

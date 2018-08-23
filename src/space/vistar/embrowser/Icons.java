@@ -17,12 +17,15 @@ public class Icons {
     public static final String BUTTON_MINUS = "minus";
     public static final String BUTTON_ZOOM_RESET = "zoomreset";
     public static final String BUTTON_REFRESH = "refr";
+    public static final String BUTTON_OPTIONS = "options";
+    public static final String BUTTON_SOURCECODE = "sourcecode";
 
     private String[] buttonsPreload = {
         BUTTON_BACK, BUTTON_FORWARD,
         BUTTON_MINUS, BUTTON_PLUS,
         BUTTON_GO, BUTTON_REFRESH,
-        BUTTON_ZOOM_RESET,
+        BUTTON_ZOOM_RESET, BUTTON_OPTIONS,
+        BUTTON_SOURCECODE,
     };
 
     private String[] buttonState = {
@@ -33,6 +36,10 @@ public class Icons {
 
     private static Icons instance;
 
+    /**
+     * Singleton get Instance
+     * @return Icons
+     */
     public static synchronized Icons getInstance() {
         if (instance == null) {
             instance = new Icons();
@@ -40,6 +47,9 @@ public class Icons {
         return instance;
     }
 
+    /**
+     * Contractor
+     */
     public Icons() {
         for (String button : buttonsPreload) {
             HashMap<String, Icon> buttonIcons = new HashMap<>();
@@ -50,6 +60,11 @@ public class Icons {
         }
     }
 
+    /**
+     * @param button
+     * @param state
+     * @return null|Icon
+     */
     public Icon getButtonIcon(String button, String state) {
         if (!buttonsIcons.containsKey(button)) {
             return null;
@@ -61,5 +76,15 @@ public class Icons {
         }
 
         return buttonIcons.get(state);
+    }
+
+    /**
+     * @param button Button for setup icon
+     * @param iconName icon name
+     */
+    public static void setButtonIcon(JButton button, String iconName) {
+        button.setIcon(Icons.getInstance().getButtonIcon(iconName, Icons.STATE_NORMAL));
+        button.setPressedIcon(Icons.getInstance().getButtonIcon(iconName, Icons.STATE_PRESSED));
+        button.setDisabledIcon(Icons.getInstance().getButtonIcon(iconName, Icons.STATE_DISABLE));
     }
 }

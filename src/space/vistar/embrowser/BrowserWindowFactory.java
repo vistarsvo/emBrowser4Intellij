@@ -9,6 +9,7 @@ import com.intellij.openapi.wm.ex.ToolWindowManagerListener;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.sun.istack.internal.NotNull;
+import space.vistar.embrowser.Browser.BrowserMainPanel;
 
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -35,7 +36,7 @@ public class BrowserWindowFactory implements ToolWindowFactory {
         final ToolWindowManager manager = ToolWindowManager.getInstance(project);
 
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(new BrowserPanel(new JavaFxBrowserView()),"", false);
+        Content content = contentFactory.createContent(new BrowserMainPanel(new space.vistar.embrowser.Browser.JavaFxBrowserView(), project),"", false);
         toolWindow.getContentManager().addContent(content);
         //toolWindow.getActivation().doWhenDone(() -> System.out.println("doWhenDone"));
         //toolWindow.activate(() -> System.out.println("activate"));

@@ -1,9 +1,10 @@
-package space.vistar.embrowser;
+package space.vistar.embrowser.Browser;
 
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.embed.swing.JFXPanel;
@@ -12,11 +13,21 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
+import space.vistar.embrowser.BrowserView;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import javax.swing.JComponent;
+import javax.swing.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.security.GeneralSecurityException;
 import java.util.function.Consumer;
 
@@ -24,15 +35,11 @@ import java.util.function.Consumer;
  * Браузер
  */
 public class JavaFxBrowserView implements BrowserView {
-
-    private static final String userAgent = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/61.0";
-
     private WebView browser;
     private WebEngine webEngine;
-
     private JFXPanel jfxPanel;
-
-    private BrowserPanel panel;
+    private BrowserMainPanel browserPanel;
+    private String lastHmlSource = "";
 
     static {
         TrustManager[] trustAllCerts = new TrustManager[]{
@@ -57,14 +64,32 @@ public class JavaFxBrowserView implements BrowserView {
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (GeneralSecurityException e) {
+
         }
     }
 
+    /**
+     * Construct
+     */
     public JavaFxBrowserView() {
+
     }
 
-    public void setPanel(BrowserPanel panel) {
-        this.panel = panel;
+    /**
+     * @param browserPanel
+     */
+    public void setBrowserPanel(BrowserMainPanel browserPanel) {
+        this.browserPanel = browserPanel;
+    }
+
+    @Override
+    public String getHtmlSource() {
+        return this.lastHmlSource;
+    }
+
+    @Override
+    public boolean hasHtmlSource() {
+        return lastHmlSource.length() > 0;
     }
 
     @Override
@@ -74,48 +99,97 @@ public class JavaFxBrowserView implements BrowserView {
 
     @Override
     public void load(String url) {
+        lastHmlSource = "";
         Platform.runLater(() -> {
+            webEngine.setUserAgent(BrowserConfig.userAgent);
             webEngine.load(url);
         });
     }
 
     @Override
     public void reload() {
+        lastHmlSource = "";
         jfxPanel = new JFXPanel();
         Platform.runLater(() -> {
             browser = new WebView();
             webEngine = browser.getEngine();
-            webEngine.setUserAgent(userAgent);
+            webEngine.setUserAgent(BrowserConfig.userAgent);
             webEngine.setUserStyleSheetLocation(getClass().getResource("/default.css").toExternalForm());
-            webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
-                if (Worker.State.RUNNING.equals(newValue)) {
-                     panel.stateLabel.setText("Loading...");
+
+            webEngine.getLoadWorker().stateProperty().addListener((ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) -> {
+                browserPanel.stateLabel.setText("...");
+                if (Worker.State.SCHEDULED.equals(newValue)) {
+                    browserPanel.stateLabel.setText("Scheduled loading");
+                } else if (Worker.State.CANCELLED.equals(newValue)) {
+                    browserPanel.stateLabel.setText("Loading canceled");
+                } else if (Worker.State.RUNNING.equals(newValue)) {
+                     browserPanel.stateLabel.setText("Loading document and resources...");
                 }
                 else if (Worker.State.FAILED.equals(newValue)) {
-                    panel.stateLabel.setText("Loading error");
-                    String message = "Error load url: " + panel.urlField.getText();
+                    browserPanel.stateLabel.setText("Loading error");
+                    String message = "Error load url: ";// + browserPanel.url.getText();
                     Notifications.Bus.notify(
                             new Notification(
                                     "emBrowser",
                                     "Loading Error",
                                     message,
                                     NotificationType.ERROR));
-                    panel.updateHistoryButtonsState();
+                    browserPanel.updateHistoryButtonsState();
                 } else if (Worker.State.SUCCEEDED.equals(newValue)) {
-                    panel.stateLabel.setText("OK");
+
                     String location = webEngine.getLocation();
                     new java.util.Timer().schedule(
                             new java.util.TimerTask() {
                                 @Override
                                 public void run() {
-                                    Platform.runLater(() -> {
-                                        panel.urlField.setText(location);
-                                    });
+                                 //   Platform.runLater(() -> browserPanel.url.setText(location));
                                 }
                             },
                             500
                     );
-                    panel.updateHistoryButtonsState();
+                    browserPanel.updateHistoryButtonsState();
+                    browserPanel.titleLable.setText(webEngine.getTitle());
+
+                    org.w3c.dom.Document doc = webEngine.getDocument();
+                    try {
+                        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+                        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+                        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+                        OutputStream output = new OutputStream()
+                        {
+                            private StringBuilder string = new StringBuilder();
+                            @Override
+                            public void write(int b) throws IOException {
+                                this.string.append((char) b );
+                            }
+
+                            public String toString(){
+                                return this.string.toString();
+                            }
+                        };
+
+                        transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(output, "UTF-8")));
+                        this.lastHmlSource = output.toString();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        this.lastHmlSource = ex.getMessage();
+                    }
+                    String con = this.getHtmlSource();
+                    browserPanel.stateLabel.setText(" " + (Math.round(con.length() / 1024) + " kb"));
+                    browserPanel.updateSourceCodeState();
+
+                    browserPanel.urlComboBox.removeAllItems();
+                    ObservableList<WebHistory.Entry> ent = webEngine.getHistory().getEntries();
+                    for (int x = 0; x < ent.size(); x++) {
+                        browserPanel.urlComboBox.addItem(ent.get(ent.size() - 1 - x).getUrl());
+                        if (x >= 15) {
+                            break;
+                        }
+                    }
                 }
             });
         });
@@ -123,11 +197,9 @@ public class JavaFxBrowserView implements BrowserView {
 
     @Override
     public void urlChangeCallback(Consumer<String> consumer) {
-        Platform.runLater(() -> {
-            webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) -> {
-                consumer.accept(webEngine.getLocation());
-            });
-        });
+        Platform.runLater(() ->
+                webEngine.getLoadWorker().stateProperty().addListener((ov, oldState, newState) ->
+                        consumer.accept(webEngine.getLocation())));
     }
 
     @Override
@@ -152,23 +224,20 @@ public class JavaFxBrowserView implements BrowserView {
                 || (scale > 0 && currentZoom <= 3.75)) {
                 browser.setZoom(currentZoom + scale);
                 currentScale = currentZoom + scale;
-                panel.updateZoomButtons();
-                if (currentScale == 1d) {
-                    panel.zoomLabel.setText("");
-                } else {
-                    panel.zoomLabel.setText(String.valueOf(Math.round(currentScale * 100)) + '%');
-                }
+                browserPanel.updateZoomButtons();
+                browserPanel.zoomState.setText("zoom " + String.valueOf(Math.round(currentScale * 100)) + '%');
             }
         });
     }
+
     @Override
     public void resetZoom()
     {
         Platform.runLater(() -> {
             browser.setZoom(1);
             currentScale = 1;
-            panel.zoomLabel.setText("");
-            panel.updateZoomButtons();
+            browserPanel.zoomState.setText("zoom " + String.valueOf(Math.round(currentScale * 100)) + '%');
+            browserPanel.updateZoomButtons();
         });
     }
 

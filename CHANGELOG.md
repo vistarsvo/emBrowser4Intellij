@@ -1,6 +1,13 @@
 Embedded Web Browser for Intellij Platforms Change Log
 ======================================================
 
+2.0.0 August 23, 2018
+--------------------------
+- New Layout Design
+- Add History drop down in url address bar
+- Add button for View Html Source
+- Add Options button (can change user agent string)
+
 1.1.3 August 23, 2018
 --------------------------
 - Fix zooming out button state
